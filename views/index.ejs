@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+    .single {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
   <body>
     <%- include('partials/header') %>
     <main>
@@ -8,8 +14,12 @@
     <div class="AllBlogs">
       <h2>My Blogs</h2>
       <% if(blog.length > 0) { %> <% blog.forEach(blog => { %>
-      <h3 class="title"><%= blog.title %></h3>
-      <p snippet="snippet"><%= blog.snippet %></p>
+      <a class="single" href="/home/<%=blog._id %>">
+        <%# the reason its '_id' instead of 'id' is because its defined like
+        that in mongoose %>
+        <h3 class="title"><%= blog.title %></h3>
+        <p snippet="snippet"><%= blog.snippet %></p>
+      </a>
       <% }) %> <% } else { %>
       <p>Nothing to Display</p>
       <% } %>

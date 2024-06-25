@@ -127,11 +127,28 @@ app.get("/home", (req, res) => {
     });
 });
 
+// creates a blog and posts  it in the home
 app.post("/submit", (req, res) => {
-  const blog = new Blog(req.body);
-    blog.save()
+  const blog = new Blog(req.body); // req.body is usable because of the middleware urlencoded, extracts the form data as it has POST request in create.ejs
+  blog
+    .save()
     .then((result) => {
       res.redirect("/home");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+// create blogs page
+app.get("/home/create", (req, res) => {
+  res.render("create", { title: "Create Blog" });
+});
+
+app.get("/home/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id)
+    .then((result) => {
+      res.render("description", { title: "Blog Description", blog: result });
     })
     .catch((err) => {
       console.log(err);
@@ -141,10 +158,6 @@ app.post("/submit", (req, res) => {
 //about page
 app.get("/about", (req, res) => {
   res.render("about", { title: "About" });
-});
-// create blogs page
-app.get("/home/create", (req, res) => {
-  res.render("create", { title: "Create Blog" });
 });
 
 // redirect to about if about-us

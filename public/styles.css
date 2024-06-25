@@ -44,6 +44,23 @@ header nav ul li a {
 header nav ul li a:hover {
   text-decoration: underline;
 }
+/* index page style */
+.AllBlogs a{
+  display: block;
+  margin: 40px 0;
+  padding-left: 30px;
+  border-left: 6px solid crimson;
+  transition: color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; 
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.AllBlogs a:hover,
+.AllBlogs a:focus,
+.AllBlogs a:active{
+  color: black; /* Change text color on hover */
+  transform: translateX(5px); /* Slight move to the right */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
 
 /* Footer Styling */
 footer {
