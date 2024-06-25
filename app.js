@@ -1,14 +1,31 @@
 //everything about express
-
 const express = require("express");
+//morgan if you wanna use, is a middleware
+
+//connects with mongoose library to run mongodb
+const mongoose = require("mongoose");
+
+//importing Blog from modules folder to get blog object
+const Blog = require("./models/blog");
 
 //express app
 const app = express();
-app.use(express.static('public'));
-app.listen(3000);
+
+//conneting to mongodb
+const dbURL =
+  "mongodb+srv://Zap_man:hello%40123@cluster0.h94glgb.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0";
+mongoose
+  .connect(dbURL) // %40 is replacing @ sign for proper character encoding//this is asynchronous
+  .then((result) => app.listen(3000))
+  .catch((err) => console.log(err));
 
 //register view engine
 app.set("view engine", "ejs");
+
+// Middleware
+// static middleware that accesses the file inside public through express
+app.use(express.static("public")); // takes css file
+app.use(express.urlencoded({ extended: true })); //takes post request data from the blog create form
 
 /* 
 
@@ -32,35 +49,101 @@ app.use((req, res) => {
 });
 */
 
+// //sandbox routing to mongodb database
+// app.get("/add-blog", (req, res) => {
+//   // adds a  blog
+//   const blog = new Blog({
+//     //passing arguments for our blog object
+//     title: "hello new blog3",
+//     snippet: "this is good",
+//     body: "body should be long",
+//   });
+
+//   blog
+//     .save() // this is asynchrounous
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
+// app.get("/all-blog", (req, res) => {
+//   Blog.find() // gives away all the blogs
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       consolo.log(err);
+//     });
+// });
+
+// app.get("/single-blog", (req, res) => {
+//   Blog.findById("6679b4b9370ec57385fe6a2f")
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
 //homepage with express
 app.get("/", (req, res) => {
-  const blog = [ // creating an array object called blog which has all the blogs
-    {
-      title: "All details to Buy a Car in United States as a Student",
-      snippet:
-        "Start off from Facebook Marketplace always, clean title is preferred",
-    },
-    {
-      title: "Cook a pasta easily as a noobie",
-      snippet: "start watching a youtube video for it",
-    },
-    {
-      title: "Five companies to start investing on",
-      snippet: "invest on index funds",
-    },
-    {
-      title: "How to build a webapp with react",
-      snippet: "start off with documentation and crash course",
-    },
-  ];
-  //  res.render() renders index with dynamic content
-  res.render("index", { title: "Home", blog });});//passing the blog
+  // const blog = [
+  // creating an array object called blog which has all the blogs
+  //   {
+  //     title: "All details to Buy a Car in United States as a Student",
+  //     snippet:
+  //       "Start off from Facebook Marketplace always, clean title is preferred",
+  //   },
+  //   {
+  //     title: "Cook a pasta easily as a noobie",
+  //     snippet: "start watching a youtube video for it",
+  //   },
+  //   {
+  //     title: "Five companies to start investing on",
+  //     snippet: "invest on index funds",
+  //   },
+  //   {
+  //     title: "How to build a webapp with react",
+  //     snippet: "start off with documentation and crash course",
+  //   },
+  // ];
+  // //  res.render() renders index with dynamic content
+  // res.render("index", { title: "Home", blog }); //passing the blog
+  res.redirect("/home");
+});
+
+app.get("/home", (req, res) => {
+  Blog.find() // gives all the blogs
+    .sort({ createdAt: -1 }) // sorts the blog based on latest time creation
+    .then((result) => {
+      res.render("index", { title: "Blogs", blog: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+app.post("/submit", (req, res) => {
+  const blog = new Blog(req.body);
+    blog.save()
+    .then((result) => {
+      res.redirect("/home");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 //about page
 app.get("/about", (req, res) => {
   res.render("about", { title: "About" });
 });
 // create blogs page
-app.get("/create", (req, res) => {
+app.get("/home/create", (req, res) => {
   res.render("create", { title: "Create Blog" });
 });
 
