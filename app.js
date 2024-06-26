@@ -145,13 +145,27 @@ app.get("/home/create", (req, res) => {
 });
 
 app.get("/home/:id", (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id; // gets the id for us from mongoose
   Blog.findById(id)
     .then((result) => {
       res.render("description", { title: "Blog Description", blog: result });
     })
     .catch((err) => {
       console.log(err);
+    });
+});
+
+app.delete("/home/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      //sends json to frontend and redirects to /home after deletion
+      res.json({ redirect: "/home" }); // sending json as we are using ajax request (if we use ajax request we don't need to refresh the entire web page
+    }) //when we send and retrieve data from the server asynchronously
+
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Failed to delete the document" });
     });
 });
 
