@@ -7,14 +7,14 @@
     }
   </style>
   <body>
-    <%- include('partials/header') %>
+    <%- include('../partials/header') %>
     <main>
       <h3>Read the latest posts and catch up with my work.</h3>
     </main>
     <div class="AllBlogs">
       <h2>My Blogs</h2>
       <% if(blog.length > 0) { %> <% blog.forEach(blog => { %>
-      <a class="single" href="/home/<%=blog._id %>">
+      <a class="single" href="/<%=blog._id %>">
         <%# the reason its '_id' instead of 'id' is because its defined like
         that in mongoose %>
         <h3 class="title"><%= blog.title %></h3>
@@ -24,6 +24,6 @@
       <p>Nothing to Display</p>
       <% } %>
     </div>
-    <%- include('partials/footer') %>
+    <%- include('../partials/footer') %>
   </body>
 </html>

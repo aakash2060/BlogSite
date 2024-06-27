@@ -5,9 +5,6 @@ const express = require("express");
 //connects with mongoose library to run mongodb
 const mongoose = require("mongoose");
 
-//importing Blog from modules folder to get blog object
-const Blog = require("./models/blog");
-
 //express app
 const app = express();
 
@@ -18,6 +15,8 @@ mongoose
   .connect(dbURL) // %40 is replacing @ sign for proper character encoding//this is asynchronous
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
+
+const blog_routes = require("./Routes/blog_routes");
 
 //register view engine
 app.set("view engine", "ejs");
@@ -90,7 +89,7 @@ app.use((req, res) => {
 // });
 
 //homepage with express
-app.get("/", (req, res) => {
+// app.get("/", (req, res) => {
   // const blog = [
   // creating an array object called blog which has all the blogs
   //   {
@@ -113,61 +112,8 @@ app.get("/", (req, res) => {
   // ];
   // //  res.render() renders index with dynamic content
   // res.render("index", { title: "Home", blog }); //passing the blog
-  res.redirect("/home");
-});
-
-app.get("/home", (req, res) => {
-  Blog.find() // gives all the blogs
-    .sort({ createdAt: -1 }) // sorts the blog based on latest time creation
-    .then((result) => {
-      res.render("index", { title: "Blogs", blog: result });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-// creates a blog and posts  it in the home
-app.post("/submit", (req, res) => {
-  const blog = new Blog(req.body); // req.body is usable because of the middleware urlencoded, extracts the form data as it has POST request in create.ejs
-  blog
-    .save()
-    .then((result) => {
-      res.redirect("/home");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-// create blogs page
-app.get("/home/create", (req, res) => {
-  res.render("create", { title: "Create Blog" });
-});
-
-app.get("/home/:id", (req, res) => {
-  const id = req.params.id; // gets the id for us from mongoose
-  Blog.findById(id)
-    .then((result) => {
-      res.render("description", { title: "Blog Description", blog: result });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-app.delete("/home/:id", (req, res) => {
-  const id = req.params.id;
-  Blog.findByIdAndDelete(id)
-    .then((result) => {
-      //sends json to frontend and redirects to /home after deletion
-      res.json({ redirect: "/home" }); // sending json as we are using ajax request (if we use ajax request we don't need to refresh the entire web page
-    }) //when we send and retrieve data from the server asynchronously
-
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: "Failed to delete the document" });
-    });
-});
+//   res.redirect("/");
+// });
 
 //about page
 app.get("/about", (req, res) => {
@@ -178,6 +124,9 @@ app.get("/about", (req, res) => {
 app.get("/about-us", (req, res) => {
   res.redirect("about");
 });
+
+//blog routes
+app.use("/", blog_routes);
 
 // redirect to 404 page if random links
 app.use((req, res) => {

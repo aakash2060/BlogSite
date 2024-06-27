@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('partials/header') %>
+    <%- include('../partials/header') %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= blog.title %></title>
@@ -88,11 +88,10 @@
         <div class="content">
           <p><%= blog.body %></p>
         </div>
-        <a class="delete" data-doc="<%= blog._id %>">Delete</a> <%# heredata-doc
-        has stored the blog's id %>
+        <a class="delete" data-doc="<%= blog._id %>">Delete</a> <%# heredata-doc has stored the blog's id, another thing is 'doc' is going to be used at the bottom %> 
       </div>
     </main>
-    <footer><%- include('partials/footer') %></footer>
+    <footer><%- include('../partials/footer') %></footer>
     <script>
       const deletebutton = document.querySelector("a.delete"); //we need to carry out event handler
       deletebutton.addEventListener("click", (e) => {
