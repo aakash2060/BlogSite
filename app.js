@@ -1,18 +1,19 @@
-//everything about express
-const express = require("express");
-//morgan if you wanna use, is a middleware
+// Load environment variables from .env file
+require("dotenv").config();
 
-//connects with mongoose library to run mongodb
+// Import required modules
+const express = require("express");
 const mongoose = require("mongoose");
 
-//express app
+// Create Express app
 const app = express();
 
-//conneting to mongodb
-const dbURL =
-  "mongodb+srv://Zap_man:hello%40123@cluster0.h94glgb.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0";
+// Connect to MongoDB using environment variable
 mongoose
-  .connect(dbURL) // %40 is replacing @ sign for proper character encoding//this is asynchronous
+  .connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }) // %40 is replacing @ sign for proper character encoding//this is asynchronous
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 
@@ -90,28 +91,28 @@ app.use((req, res) => {
 
 //homepage with express
 // app.get("/", (req, res) => {
-  // const blog = [
-  // creating an array object called blog which has all the blogs
-  //   {
-  //     title: "All details to Buy a Car in United States as a Student",
-  //     snippet:
-  //       "Start off from Facebook Marketplace always, clean title is preferred",
-  //   },
-  //   {
-  //     title: "Cook a pasta easily as a noobie",
-  //     snippet: "start watching a youtube video for it",
-  //   },
-  //   {
-  //     title: "Five companies to start investing on",
-  //     snippet: "invest on index funds",
-  //   },
-  //   {
-  //     title: "How to build a webapp with react",
-  //     snippet: "start off with documentation and crash course",
-  //   },
-  // ];
-  // //  res.render() renders index with dynamic content
-  // res.render("index", { title: "Home", blog }); //passing the blog
+// const blog = [
+// creating an array object called blog which has all the blogs
+//   {
+//     title: "All details to Buy a Car in United States as a Student",
+//     snippet:
+//       "Start off from Facebook Marketplace always, clean title is preferred",
+//   },
+//   {
+//     title: "Cook a pasta easily as a noobie",
+//     snippet: "start watching a youtube video for it",
+//   },
+//   {
+//     title: "Five companies to start investing on",
+//     snippet: "invest on index funds",
+//   },
+//   {
+//     title: "How to build a webapp with react",
+//     snippet: "start off with documentation and crash course",
+//   },
+// ];
+// //  res.render() renders index with dynamic content
+// res.render("index", { title: "Home", blog }); //passing the blog
 //   res.redirect("/");
 // });
 
