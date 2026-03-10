@@ -25,7 +25,7 @@ app.set("views", require("path").join(__dirname, "views"));
 
 // Middleware
 // static middleware that accesses the file inside public through express
-app.use(express.static("public")); // takes css file
+app.use(express.static(require("path").join(__dirname, "public"))); // takes css file
 app.use(express.urlencoded({ extended: true })); //takes post request data from the blog create form
 
 /* 
