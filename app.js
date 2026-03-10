@@ -21,6 +21,7 @@ const blog_routes = require("./Routes/blog_routes");
 
 //register view engine
 app.set("view engine", "ejs");
+app.set("views", require("path").join(__dirname, "views"));
 
 // Middleware
 // static middleware that accesses the file inside public through express
